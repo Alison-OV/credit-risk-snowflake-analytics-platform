@@ -1,0 +1,18 @@
+- name: Create dbt profile
+  run: |
+    mkdir -p ~/.dbt
+    cat <<EOF > ~/.dbt/profiles.yml
+    credit_risk_project:
+      target: dev
+      outputs:
+        dev:
+          type: snowflake
+          account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          user: ${{ secrets.SNOWFLAKE_USER }}
+          password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+          role: ${{ secrets.SNOWFLAKE_ROLE }}
+          database: ${{ secrets.SNOWFLAKE_DATABASE }}
+          warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          schema: analytics
+          threads: 4
+    EOF
