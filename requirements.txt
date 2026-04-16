@@ -1,0 +1,31 @@
+
+# CORE DATA ENGINEERING
+pandas==2.2.2
+numpy==1.26.4
+
+# EDA / NOTEBOOKS
+matplotlib==3.8.4
+seaborn==0.13.2
+
+# KAGGLE INGESTION
+kaggle==1.6.17
+
+# AWS S3 DATA LAKE
+boto3==1.34.131
+botocore==1.34.131
+
+# SNOWFLAKE CONNECTIVITY
+snowflake-connector-python==3.10.0
+snowflake-sqlalchemy==1.5.3
+
+# DBT (ANALYTICS ENGINEERING)
+dbt-core==1.8.2
+dbt-snowflake==1.8.2
+
+# QUALITY + DEV TOOLS (CI/CD)
+pytest==8.2.0
+flake8==7.0.0
+pip-audit==2.7.3
+
+# OPTIONAL (DATA VALIDATION / SCALING READY)
+pyarrow==16.1.0

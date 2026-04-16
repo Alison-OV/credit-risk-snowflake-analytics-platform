@@ -1,0 +1,3 @@
+CREATE TABLE dim_time AS
+SELECT
+CURRENT_DATE() AS date_id;
