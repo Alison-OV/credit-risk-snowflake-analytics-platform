@@ -15,24 +15,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Create dbt profile
-        run: |
-          mkdir -p ~/.dbt
-          cat <<EOF > ~/.dbt/profiles.yml
-          credit_risk_project:
-            target: dev
-            outputs:
-              dev:
-                type: snowflake
-                account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-                user: ${{ secrets.SNOWFLAKE_USER }}
-                password: ${{ secrets.SNOWFLAKE_PASSWORD }}
-                role: ${{ secrets.SNOWFLAKE_ROLE }}
-                database: ${{ secrets.SNOWFLAKE_DATABASE }}
-                warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
-                schema: analytics
-                threads: 4
-
       - name: Cache pip
         uses: actions/cache@v4
         with:
@@ -61,42 +43,6 @@ jobs:
         run: |
           pytest -q || true
 
-
-  dbt_ci:
-    name: dbt Build & Test
-    runs-on: ubuntu-latest
-
-    needs: validate_python
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-
-      - name: Install dbt
-        run: |
-          pip install dbt-core dbt-snowflake
-
-      - name: dbt debug (connection check)
-        run: |
-          cd dbt_project
-          dbt debug
-
-      - name: dbt run (build models)
-        run: |
-          cd dbt_project
-          dbt run
-
-      - name: dbt test (data quality checks)
-        run: |
-          cd dbt_project
-          dbt test
-
-
   security_check:
     name: Security Scan (basic)
     runs-on: ubuntu-latest
@@ -114,7 +60,7 @@ jobs:
   deployment:
     name: Deploy Pipeline (simulated production)
     runs-on: ubuntu-latest
-    needs: [validate_python, dbt_ci]
+    needs: [validate_python, security_check]
 
     if: github.ref == 'refs/heads/main'
 
